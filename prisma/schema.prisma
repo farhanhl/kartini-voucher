@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model VoucherTable {
+  id         String   @id @default(uuid())
+  name       String
+  start_date DateTime
+  end_date   DateTime
+  amount     Float
+  uvcs       UVCTable[]
+}
+
+model UVCTable {
+  id          String   @id @default(uuid())
+  id_voucher  String
+  voucher     VoucherTable @relation(fields: [id_voucher], references: [id])
+  start_date  DateTime
+  end_date    DateTime
+  amount      Float
+  code        String   @unique
+}
